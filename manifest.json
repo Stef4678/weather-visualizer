@@ -1,0 +1,39 @@
+{
+  "id": "LWTHRVZ2025A1",
+  "version": "1.0.0",
+  "name": "Skyline Weather",
+  "description": "Beautiful visual weather dashboard for Eagle — current conditions, 48-hour hourly chart, 3/5/7/10-day forecasts, air quality, sun & moon, animated weather scenes. Unit toggle °C/°F. Data by Open-Meteo.",
+  "logo": "/logo.png",
+  "keywords": [
+    "weather",
+    "forecast",
+    "temperature",
+    "hourly",
+    "daily",
+    "weekly",
+    "10-day",
+    "air quality",
+    "uv",
+    "sun",
+    "moon",
+    "open-meteo"
+  ],
+  "platform": "all",
+  "arch": "all",
+  "devTools": false,
+  "main": {
+    "url": "index.html",
+    "width": 980,
+    "height": 940,
+    "minWidth": 760,
+    "minHeight": 640,
+    "resizable": true,
+    "maximizable": true,
+    "minimizable": true,
+    "alwaysOnTop": false,
+    "backgroundColor": "#0b1224",
+    "childWindow": false,
+    "multiple": true,
+    "runAfterInstall": false
+  }
+}

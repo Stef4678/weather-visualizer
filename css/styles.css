@@ -164,7 +164,7 @@ h1,h2{font-weight:700;letter-spacing:-.01em;margin:0}
 }
 
 /* place / search */
-.place-card{padding:16px 18px}
+.place-card{padding:16px 18px;position:relative;z-index:120}
 .search-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 .search-field{position:relative;flex:1 1 320px;min-width:240px}
 .search-ico{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--ink-dim);pointer-events:none}

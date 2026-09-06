@@ -9,6 +9,19 @@ no-API-key **[Open-Meteo](https://open-meteo.com)** APIs.
 
 ---
 
+## Screenshots
+
+![Skyline Weather — main dashboard](assets/screenshot%20main.jpg)
+
+<div align="center">
+  <img src="assets/Screenshot%202026-09-06%20085642.png" alt="Skyline Weather screenshot 2" width="46%"/>
+  <img src="assets/Screenshot%202026-09-06%20085652.png" alt="Skyline Weather screenshot 3" width="46%"/>
+  <img src="assets/Screenshot%202026-09-06%20085658.png" alt="Skyline Weather screenshot 4" width="46%"/>
+  <img src="assets/Screenshot%202026-09-06%20085716.png" alt="Skyline Weather screenshot 5" width="46%"/>
+</div>
+
+---
+
 ## Features
 
 - **Animated, theme-aware UI** — the whole app recolors itself to the current

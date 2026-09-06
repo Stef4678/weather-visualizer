@@ -102,7 +102,7 @@ server is safer for fetch + clipboard.)
 │  ├─ icons.js            animated SVG weather-icon engine
 │  ├─ api.js              Open-Meteo geocoding + forecast + air-quality client
 │  ├─ charts.js           SVG chart renderers (hourly 48 h, daily range trend)
-│  ├─ wallpaper.js        1600×900 poster generator + Eagle/PNG export
+│  ├─ wallpaper.js        canvas poster generator + Eagle/PNG export
 │  └─ app.js              state, search, rendering pipeline
 ├─ scripts/
 │  ├─ make-logo.js        regenerates logo.png (pure Node, no deps)
@@ -124,3 +124,66 @@ server is safer for fetch + clipboard.)
   button.
 - Attribution: weather data by [Open-Meteo](https://open-meteo.com)
   (CC BY 4.0).
+
+## Requirements
+
+- **Eagle 4** desktop app (Windows or macOS).
+- An internet connection — weather, search and air-quality data come from the
+  free [Open-Meteo](https://open-meteo.com) APIs.
+- No API keys, no runtime dependencies, no build step required to run.
+
+> Tip: the plugin is plain HTML/CSS/JS — it also runs in any modern browser
+> (serve the folder with `python -m http.server 8899`), so you can preview it
+> without Eagle.
+
+## Installation
+
+1. Grab the latest package: `release/SkylineWeather-1.0.0.eagleplugin` (or a
+   GitHub Release asset).
+2. **Double-click** the `.eagleplugin` file, or drag it onto the Eagle window,
+   or right-click → install.
+3. Open it from the **Plugin** button on the Eagle toolbar → **Skyline Weather**.
+
+### Development install
+
+1. Copy the folder containing `manifest.json` anywhere you like.
+2. In Eagle: Plugin → **Developer Options** → install from folder (or place it
+   into your Eagle plugins directory).
+3. Re-open the plugin window after editing to reload the HTML/CSS/JS.
+
+## Usage
+
+- **Pick a place** — type any city into the search bar and choose a suggestion,
+  press **My location** (GPS, with an automatic “≈ IP location” fallback when
+  Eagle blocks GPS), or tap a popular/favorite/recent chip.
+- **°C / °F** — the unit toggle in the top bar switches everything
+  (temperatures, wind, precipitation).
+- **Forecast range** — chips switch between Today / 3 / 5 / 7 / 10 days.
+- **Hourly** — hover the 48-hour chart for details; use **Rain % / Wind /
+  Humidity / UV** to overlay another series.
+- **Export** — “Save wallpaper PNG” or “Add to Eagle library” lets you pick a
+  **Simple weather** poster or the **Whole forecast** poster.
+- **Refresh** — the ↻ button forces a fresh fetch (skips the 3-minute cache);
+  the app also auto-refreshes every 10 minutes.
+- **Clear** — the ✕ next to the city name clears the location; the app then
+  reopens on the welcome screen instead of restoring a city.
+
+## Troubleshooting
+
+| Problem | Solution |
+| --- | --- |
+| “Location unavailable” | Eagle webviews usually block GPS. My location falls back to an approximate IP location automatically. If that also fails (offline), search your city by name. |
+| Weather won't load | Check your connection — requests go to `api.open-meteo.com`. Click **↻ Refresh** (it bypasses the cache) or use the **Retry** button on the error card. |
+| Data looks stale | Press **↻ Refresh** — normal loads may reuse a 3-minute cache, refresh never does. |
+| Search shows no results | Search needs the geocoding API; check connectivity and try pressing Enter. |
+| Old version renders results behind panels | That stacking bug was fixed — update to the latest package. |
+| Duplicate plugin entries | The plugin ID is a UUID now; if an older entry with the legacy ID is still installed, remove it in Eagle → Plugins. |
+
+## Contact
+
+- GitHub: [Stef4678/weather-visualizer](https://github.com/Stef4678/weather-visualizer)
+- Email: [stefaninfp@gmail.com](mailto:stefaninfp@gmail.com)
+
+## License
+
+MIT © 2026 Kerekes Stefan

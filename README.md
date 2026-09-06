@@ -184,6 +184,22 @@ server is safer for fetch + clipboard.)
 - GitHub: [Stef4678/weather-visualizer](https://github.com/Stef4678/weather-visualizer)
 - Email: [stefaninfp@gmail.com](mailto:stefaninfp@gmail.com)
 
+## Weather data license — Open-Meteo
+
+Skyline Weather pulls weather, forecast, geocoding and air-quality data from
+[Open-Meteo](https://open-meteo.com).
+
+- The data is licensed under the **Creative Commons Attribution 4.0
+  International (CC BY 4.0)** license — see the
+  [Open-Meteo licence](https://open-meteo.com/en/licence) and
+  [terms of use](https://open-meteo.com/en/terms).
+- Required attribution: _Weather data by Open-Meteo.com_.
+- The **free API** is for **non-commercial** use only, with rate limits
+  (10,000 calls/day). This plugin uses it without any keys; a commercial
+  deployment needs an Open-Meteo API subscription.
+- Data is provided as-is, without warranty; Open-Meteo is not responsible for
+  inaccuracies or availability.
+
 ## License
 
 MIT © 2026 Kerekes Stefan

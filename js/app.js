@@ -59,6 +59,9 @@
     trendWrap: $('trendWrap'), trendChart: $('trendChart'), dailyList: $('dailyList'),
     btnPoster: $('btnPoster'), btnEagle: $('btnEagle'), btnCopy: $('btnCopy'),
     exportMenu: $('exportMenu'),
+    confirmOverlay: $('confirmOverlay'), confirmTitle: $('confirmTitle'),
+    confirmText: $('confirmText'),
+    btnConfirmCancel: $('btnConfirmCancel'), btnConfirmRemove: $('btnConfirmRemove'),
     metaUpdated: $('metaUpdated'), toast: $('toast')
   };
 
@@ -80,12 +83,52 @@
 
   /* ---------- toast ---------- */
   let toastTimer = null;
-  function toast(msg, isErr, ms) {
-    D.toast.textContent = msg;
+  function hideToast() { D.toast.hidden = true; }
+  /* action (optional) = { label, run } — renders an Undo-style button next to
+     the message so a removal can be reversed for a few seconds. */
+  function toast(msg, isErr, ms, action) {
+    D.toast.textContent = '';
     D.toast.classList.toggle('err', !!isErr);
+    const text = document.createElement('span');
+    text.textContent = msg;
+    D.toast.appendChild(text);
+    if (action) {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'toast-action';
+      btn.textContent = action.label;
+      btn.addEventListener('click', () => { hideToast(); action.run(); });
+      D.toast.appendChild(btn);
+    }
     D.toast.hidden = false;
     clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => { D.toast.hidden = true; }, ms || 2600);
+    toastTimer = setTimeout(hideToast, ms || (action ? 8000 : 2600));
+  }
+
+  /* ---------- confirm-before-removal dialog ---------- */
+  /* Shown before any removal of a saved/recent location (chip ✕, Pin tap
+     to unpin). Discloses the location, the affected list and the fact that
+     only Skyline Weather's location list is touched, then asks for a separate
+     Cancel / Remove confirmation. Removing without undo is guarded by a short
+     Undo toast for extra protection. */
+  function hideConfirm() { D.confirmOverlay.hidden = true; D._confirmRemove = null; }
+  function confirmRemove(listLabel, place, onConfirm) {
+    const name = U.esc(place.name || '');
+    const sub = U.esc([place.admin1, place.country].filter(Boolean).join(', '));
+    const placeDesc = name + (sub ? ' · ' + sub : '');
+    const listEsc = U.esc(listLabel);
+    D.confirmTitle.textContent = 'Remove from ' + listLabel + '?';
+    D.confirmText.innerHTML =
+      '<div class="confirm-place"><b>' + placeDesc + '</b></div>' +
+      '<p>This removes <b>' + placeDesc + '</b> from your <b>' + listEsc +
+      '</b> list in Skyline Weather. Nothing else is changed — your Eagle library, ' +
+      'files and other apps are not affected.</p>' +
+      '<p class="confirm-note">There is no direct way to get it back from this list. ' +
+      'If you change your mind, an <b>Undo</b> button appears for a few seconds, or you can ' +
+      're-find the place by searching for it.</p>';
+    D._confirmRemove = onConfirm;
+    D.confirmOverlay.hidden = false;
+    D.btnConfirmCancel.focus();
   }
 
   /* ---------- theme ---------- */
@@ -747,9 +790,17 @@
       const x = e.target.closest('[data-x]');
       if (x) {
         e.stopPropagation();
-        Store.removeFav(x.dataset.x);
-        renderPinnedRows();
-        updatePinBtn();
+        const place = Store.favorites().find(f => f.id === x.dataset.x);
+        if (!place) return;
+        confirmRemove('Saved places', place, () => {
+          Store.removeFav(place.id);
+          renderPinnedRows();
+          updatePinBtn();
+          toast('Removed “' + place.name + '” from saved places', false, 8000, {
+            label: 'Undo',
+            run: () => { Store.toggleFav(place); renderPinnedRows(); updatePinBtn(); }
+          });
+        });
         return;
       }
       const chip = e.target.closest('.chip');
@@ -762,8 +813,16 @@
       const x = e.target.closest('[data-x]');
       if (x) {
         e.stopPropagation();
-        Store.removeRecent(x.dataset.x);
-        renderPinnedRows();
+        const place = Store.recent().find(r => r.id === x.dataset.x);
+        if (!place) return;
+        confirmRemove('Recent', place, () => {
+          Store.removeRecent(place.id);
+          renderPinnedRows();
+          toast('Removed “' + place.name + '” from recent', false, 8000, {
+            label: 'Undo',
+            run: () => { Store.pushRecent(place); renderPinnedRows(); }
+          });
+        });
         return;
       }
       const chip = e.target.closest('.chip');
@@ -772,13 +831,40 @@
       if (p) selectPlace(p);
     });
 
+    /* confirm dialog — cancel, backdrop click, Escape and the Remove action */
+    D.btnConfirmCancel.addEventListener('click', hideConfirm);
+    D.confirmOverlay.addEventListener('click', e => {
+      if (e.target === D.confirmOverlay) hideConfirm();
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && !D.confirmOverlay.hidden) hideConfirm();
+    });
+    D.btnConfirmRemove.addEventListener('click', () => {
+      const run = D._confirmRemove;
+      hideConfirm();
+      if (run) run();
+    });
+
     D.btnPin.addEventListener('click', () => {
       const p = S.place;
       if (!p || !p.id) return;
+      /* unpinning a pinned place is also a removal — confirm first */
+      if (Store.isFav(p.id)) {
+        confirmRemove('Saved places', p, () => {
+          Store.toggleFav(p);
+          renderPinnedRows();
+          updatePinBtn();
+          toast('Removed “' + p.name + '” from saved places', false, 8000, {
+            label: 'Undo',
+            run: () => { Store.toggleFav(p); renderPinnedRows(); updatePinBtn(); }
+          });
+        });
+        return;
+      }
       const added = Store.toggleFav(p);
       renderPinnedRows();
       updatePinBtn();
-      toast(added ? 'Pinned “' + p.name + '” to saved places' : 'Removed “' + p.name + '” from saved places');
+      toast('Pinned “' + p.name + '” to saved places');
     });
 
     /* locate — precise geolocation, with an IP-based approximate fallback

@@ -60,7 +60,7 @@ no-API-key **[Open-Meteo](https://open-meteo.com)** APIs.
 
 ## Install (packaged)
 
-1. Build (or grab) the release file: `release/SkylineWeather-1.0.0.eagleplugin`.
+1. Build (or grab) the release file: `release/SkylineWeather-1.0.1.eagleplugin`.
 2. Double-click it (or drag it onto Eagle / right-click → install) — Eagle 4
    handles the rest.
 
@@ -110,20 +110,31 @@ server is safer for fetch + clipboard.)
 └─ README.md
 ```
 
-## Privacy
+## Privacy & data
 
-- No tracking, no analytics, no keys. Your city queries and pinned places stay
-  in local plugin storage.
-- Weather data requests go to `api.open-meteo.com` /
-  `geocoding-api.open-meteo.com` / `air-quality-api.open-meteo.com` only.
-- **My location** uses your device's GPS when the webview allows it. Inside
-  Eagle this is usually blocked, so the plugin automatically falls back to an
-  approximate location from one of three public, keyless IP-geolocation
-  services (`ipwho.is`, `get.geojs.io`, `freeipapi.com`); results are clearly
-  marked “≈ IP location”. No IP lookup ever happens unless you press that
-  button.
-- Attribution: weather data by [Open-Meteo](https://open-meteo.com)
-  (CC BY 4.0).
+Skyline Weather has **no accounts, no API keys, no analytics and no tracking**
+built in, and it never writes to or changes your Eagle library. To show you a
+forecast it does make live network requests:
+
+- **Search** — the text you type is sent to Open-Meteo's geocoding API
+  (`geocoding-api.open-meteo.com`) so it can return matching places.
+- **Forecast & air quality** — the latitude/longitude of the place you select
+  are sent to Open-Meteo's forecast (`api.open-meteo.com`) and air-quality
+  (`air-quality-api.open-meteo.com`) APIs, together with your chosen units.
+- **My location** — when you press it the plugin asks your device for its
+  precise location; if the webview grants it, those coordinates are sent to
+  Open-Meteo. Inside Eagle GPS is usually blocked, so the plugin automatically
+  falls back to an approximate location derived from your IP via one of three
+  public, keyless IP-geolocation services (`ipwho.is`, `get.geojs.io`,
+  `freeipapi.com`); such results are clearly marked “≈ IP location”. No IP
+  lookup happens unless you press that button.
+
+Everything you save — pinned places, recent places and your preferences — is
+stored locally in plugin storage (localStorage). The plugin sends no usage
+statistics to anyone.
+
+Attribution: weather data by [Open-Meteo](https://open-meteo.com)
+(CC BY 4.0).
 
 ## Requirements
 
@@ -138,7 +149,7 @@ server is safer for fetch + clipboard.)
 
 ## Installation
 
-1. Grab the latest package: `release/SkylineWeather-1.0.0.eagleplugin` (or a
+1. Grab the latest package: `release/SkylineWeather-1.0.1.eagleplugin` (or a
    GitHub Release asset).
 2. **Double-click** the `.eagleplugin` file, or drag it onto the Eagle window,
    or right-click → install.

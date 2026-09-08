@@ -1,8 +1,8 @@
 {
   "id": "d7f0d03d-d96a-4b9d-93ae-a32bd98a6e7d",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "name": "Skyline Weather",
-  "description": "Beautiful visual weather dashboard for Eagle — current conditions, 48-hour hourly chart, 3/5/7/10-day forecasts, air quality, sun & moon, animated weather scenes. Unit toggle °C/°F. Data by Open-Meteo.",
+  "description": "Animated weather dashboard for Eagle — 48-hour chart, 3/5/7/10-day forecasts, air quality, sun & moon, °C/°F toggle. Data by Open-Meteo.",
   "logo": "/logo.png",
   "keywords": [
     "weather",

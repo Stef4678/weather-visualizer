@@ -246,6 +246,18 @@
     </button>
   </div>
 
+  <!-- ============ Confirm removal dialog ============ -->
+  <div class="modal-overlay" id="confirmOverlay" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+      <div class="modal-title" id="confirmTitle">Remove saved place?</div>
+      <div class="modal-text" id="confirmText"></div>
+      <div class="modal-actions">
+        <button type="button" class="ghost-btn" id="btnConfirmCancel">Cancel</button>
+        <button type="button" class="ghost-btn solid danger" id="btnConfirmRemove">Remove</button>
+      </div>
+    </div>
+  </div>
+
   <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
 
   <script src="js/utils.js"></script>
